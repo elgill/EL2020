@@ -1,3 +1,9 @@
-# EL2020
+!(https://www.newpaltz.edu/media/identity/logos/newpaltzlogo.jpg)
+ 1. **Personal Information**
+	 Name: *Chris Gillin*
+	 Major: *Computer Science*
+	 ID: *[N03712887](https://github.com/elgill)*
+	 Year: *Junior*
+ 2. **Class Start Date:** January 22, 2020
+ 3. **Class End Date:** May 8, 2020
 
-Hello, and welcome to Mr. Simons's repository for the spring 2020 embedded linux class.  This repository will be used as an example of ways to maintain a code base while working on a project. This is **NOT** the Embedded Linux class itself.  That is hosted on Google Classroom.  Please contact "simonsj [at] newpaltz [dot] edu" if you are in the class, but do not have the classroom code.
