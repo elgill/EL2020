@@ -1,4 +1,6 @@
-!(https://www.newpaltz.edu/media/identity/logos/newpaltzlogo.jpg)
+## Spring 2020 Embedded Linux class.
+This repository is for my class work in ***CPS342***.
+![](https://www.newpaltz.edu/media/identity/logos/newpaltzlogo.jpg)
  1. **Personal Information**
 	 Name: *Chris Gillin*
 	 Major: *Computer Science*
