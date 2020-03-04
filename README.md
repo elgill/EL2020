@@ -1,13 +1,10 @@
-## Spring 2020 Embedded Linux class.
-This repository is for my class work in ***CPS342***.![](https://www.newpaltz.edu/media/identity/logos/newpaltzlogo.jpg)
- 1. **Personal Information**
+## Blink Temperature Reader
+This code detects when the sensor is pressed and if it is, the light blinks and the current temperature reading of the sensor is outputted.
 
-	Name: *Chris Gillin*
+Prerequisites:
 
-	Major: *Computer Science*
-	
-	ID: *[N03712887](https://github.com/elgill)*
-	
-	Year: *Junior*
- 2. **Class Start Date:** January 22, 2020
- 3. **Class End Date:** May 8, 2020
+ - python3 RPi GPiO Library
+ - python3-pip
+ - Adafruit Python DHT Library
+
+This script assumes that you have the touch sensor connected to pin 19, the temperature/Humidity reader to pin 17, and the LED to pin 27 on the GPiO interface.
