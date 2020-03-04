@@ -1,5 +1,5 @@
-## Blink Temperature Reader
-This code detects when the sensor is pressed and if it is, the light blinks and the current temperature reading of the sensor is outputted.
+## Blink Temperature Logger
+This code detects when the sensor is pressed and if it is, the light blinks and the current temperature reading of the sensor is outputted and logged to a CSV file.
 
 Prerequisites:
 
