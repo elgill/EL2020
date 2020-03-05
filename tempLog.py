@@ -49,7 +49,8 @@ try:
 				data = readF(tempPin)
 				print (data)
 				log.write("{0},{1}\n".format(time.strftime("%Y‐%m‐%d %H:%M:%S"),str(data)))
-
+				log.flush()
+				os.fsync(log)
 except KeyboardInterrupt:
 	os.system('clear')
 	print('Thanks for Blinking and Thinking!')
