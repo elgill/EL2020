@@ -1,5 +1,5 @@
-## Blink Temperature Logger
-This code detects when the sensor is pressed and if it is, the light blinks and the current temperature reading of the sensor is outputted and logged to a CSV file.
+## Temerature and Humidity Log
+This code reads a temperature and humidity sensor once a minute, logs it in a sqlite database, the current temperature reading and humidity of the sensor is outputted, and it is compared against a threshold. If it is within the constraints, the green LED is lit, otherwise, the red LED is lit and a text message alert is sent containing the temperature.
 
 Prerequisites:
 
@@ -7,4 +7,4 @@ Prerequisites:
  - python3-pip
  - Adafruit Python DHT Library
 
-This script assumes that you have the touch sensor connected to pin 19, the temperature/Humidity reader to pin 17, and the LED to pin 27 on the GPiO interface.
+This script assumes that you have the the temperature/Humidity reader connected to pin 17, the green LED to pin 26 and the red LED to pin 27 on the GPiO interface.

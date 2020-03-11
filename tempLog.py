@@ -5,12 +5,19 @@ import time
 import os
 import sqlite3 as db
 import sys
+import smtplib
+
 #Assign GPIO pins
 redPin = 27
 greenPin = 26
 tempPin = 17
 #buttonPin = 19
 
+#SMTP Variables
+eFROM = "freenas.gillin@gmail.com"
+eTO = "6312751202@vtext.com"
+Subject = "Temperature Alert"
+server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 
 #Temp and Humidity Sensor
 tempSensor = Adafruit_DHT.DHT11
@@ -26,6 +33,13 @@ GPIO.setup(redPin,GPIO.OUT)
 GPIO.setup(greenPin,GPIO.OUT)
 #GPIO.setup(buttonPin, GPIO.IN)
 
+#Alert Threshold
+low=70
+high=80
+
+def inRange(inRange):
+	GPIO.output(redPin, not inRange)
+	GPIO.output(greenPin, inRange)
 
 def oneBlink(pin):
 	GPIO.output(pin,True)
@@ -47,11 +61,19 @@ def readFHum(tempPin):
 	humidity, temperature = Adafruit_DHT.read_retry(tempSensor,tempPin)
 	temperature = temperature * 9/5.0 +32
 	if humidity is not None and temperature is not None:
-		tempFahr = '{0:0.1f}*F'.format(temperature)
-		hum = '{0:0.1f}%'.format(humidity)
+		tempFahr = '{0:0.1f}'.format(temperature)
+		hum = '{0:0.1f}'.format(humidity)
 	else:
 		print('Error Reading Sensor')
 	return tempFahr,hum
+
+def sendAlarm(t):
+	print('wee woo wee woo')
+	eMessage = 'Subject: {}\n\n{}'.format(Subject, "The temperature in the room is "+t+"*F!")
+	server.login("freenas.gillin@gmail.com", "ptzxeaqwmvelffas")
+	server.sendmail(eFROM, eTO, eMessage)
+	server.quit
+
 
 try:
 	with open("./log/tempLog.csv", "a") as log:
@@ -61,16 +83,21 @@ try:
 		while True:
 #			input_state = GPIO.input(buttonPin)
 			if True:
-				for i in range (blinkTime):
-					oneBlink(redPin)
+#				for i in range (blinkTime):
+#					oneBlink(redPin)
 				time.sleep(.2)
 				temp,hum = readFHum(tempPin)
 #				hum = readHum(tempPin)
-				query='INSERT INTO tempHum (Time, Temperature, Humidity) VALUES (\"'+time.strftime("%Y-%m-%d %H:%M:%S")+'\", \"'+str(temp)+'\", \"'+str(hum)+'\");'
+				query='INSERT INTO tempHum (Time, Temperature, Humidity) VALUES (\"'+time.strftime("%Y-%m-%d %H:%M:%S")+'\", \"'+str(temp)+'*F\", \"'+str(hum)+'%\");'
 #				print(query)
 				cur.execute(query)
 				con.commit()
-				print("Temperature: ",str(temp)," Humidity: ",str(hum))
+				if low <= float(temp) <= high:
+					inRange(True)
+				else:
+					inRange(False)
+					sendAlarm(temp)
+				print("Temperature: ",str(temp),"*F Humidity: ",str(hum)+"%")
 				#log.write("{0},{1},{2}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(temp),str(hum)))
 				#log.flush()
 				#os.fsync(log)
