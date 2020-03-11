@@ -35,15 +35,14 @@ def oneBlink(pin):
 
 def connectDB():
 	try:
-		con=db.connect('log/tempHum.db')
+		con=db.connect('log/tempHum.db').cursor()
 	except db.Error as e:
 		print("Error %s:" % e.args[0])
-#	finally:
-#		if con:
-#			con.close()
-	return con
+	finally:
+		if con:
+			con.close()
 
-def readFHum(tempPin):
+def readF(tempPin):
 	humidity, temperature = Adafruit_DHT.read_retry(tempSensor,tempPin)
 	temperature = temperature * 9/5.0 +32
 	if humidity is not None and temperature is not None:
@@ -51,35 +50,34 @@ def readFHum(tempPin):
 		hum = '{0:0.1f}%'.format(humidity)
 	else:
 		print('Error Reading Sensor')
-	return tempFahr,hum
+	return tempFahr
+
+def readHum(tempPin):
+	humidity, temperature = Adafruit_DHT.read_retry(tempSensor,tempPin)
+	if humidity is not None and temperature is not None:
+		hum = '{0:0.1f}%'.format(humidity)
+	else:
+		print('Error Reading Sensor')
+	return hum
 
 try:
 	with open("./log/tempLog.csv", "a") as log:
 		start=time.time()
-		con=connectDB()
-		cur=con.cursor()
 		while True:
 #			input_state = GPIO.input(buttonPin)
 			if True:
 				for i in range (blinkTime):
 					oneBlink(redPin)
 				time.sleep(.2)
-				temp,hum = readFHum(tempPin)
-#				hum = readHum(tempPin)
-				query='INSERT INTO tempHum (Time, Temperature, Humidity) VALUES (\"'+time.strftime("%Y-%m-%d %H:%M:%S")+'\", \"'+str(temp)+'\", \"'+str(hum)+'\");'
-#				print(query)
-				cur.execute(query)
-				con.commit()
+				temp = readF(tempPin)
+				hum = readHum(tempPin)
 				print("Temperature: ",str(temp)," Humidity: ",str(hum))
-				#log.write("{0},{1},{2}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(temp),str(hum)))
-				#log.flush()
-				#os.fsync(log)
-
+				log.write("{0},{1},{2}\n".format(time.strftime("%Y‐%m‐%d %H:%M:%S"),str(temp),str(hum)))
+				log.flush()
+				os.fsync(log)
 				#adjusts to make it actually 60 seconds
 				time.sleep(60-((time.time() - start) % 60))
-
 except KeyboardInterrupt:
 	os.system('clear')
 	print('Thanks for Blinking and Thinking!')
 	GPIO.cleanup()
-	con.close()
